@@ -18,42 +18,23 @@
     }
 
     #randomText {
-      font-size: 1.5em; /* Ziemlich klein */
-      margin-bottom: 20px; /* Mehr Abstand nach unten */
+      font-size: 3em;
+      margin-bottom: 10px;
     }
 
     #datetime {
-      font-size: 3em; /* Größer */
-      margin-bottom: 20px; /* Mehr Abstand nach unten */
+      font-size: 5em;
+      margin-bottom: 10px;
     }
 
     #header {
-      font-size: 30em; /* Doppelt so groß */
-      margin-bottom: 10px; /* Weniger Abstand nach unten */
-      text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
+      font-size: 8em;
+      margin-bottom: 10px;
     }
 
     #countdown {
-      font-size: 4em; /* Etwas kleiner */
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
-    }
-
-    @media (max-width: 768px) {
-      #randomText {
-        font-size: 1em; /* Kleiner für kleinere Bildschirme */
-      }
-
-      #datetime {
-        font-size: 2em; /* Anpassung für kleinere Bildschirme */
-      }
-
-      #header {
-        font-size: 30em; /* Anpassung für kleinere Bildschirme */
-      }
-
-      #countdown {
-        font-size: 3em; /* Anpassung für kleinere Bildschirme */
-      }
+      font-size: 4em;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -124,9 +105,30 @@
       }, 10000);
     }
 
+    window.onresize = function() {
+      updateFontSize();
+    }
+
+    function updateFontSize() {
+      const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+      if (width < 600) { // Mobile View
+        document.getElementById('randomText').style.fontSize = '2em';
+        document.getElementById('datetime').style.fontSize = '3em';
+        document.getElementById('header').style.fontSize = '4em';
+        document.getElementById('countdown').style.fontSize = '2em';
+      } else { // Desktop View
+        document.getElementById('randomText').style.fontSize = '3em';
+        document.getElementById('datetime').style.fontSize = '5em';
+        document.getElementById('header').style.fontSize = '8em';
+        document.getElementById('countdown').style.fontSize = '4em';
+      }
+    }
+
     updateRandomText(); // Starte die Funktion für den zufälligen Text
     setInterval(updateDateTime, 1000); // Aktualisiere Datum und Uhrzeit jede Sekunde
     updateCountdown();
+    updateFontSize();
   </script>
 
 </body>
