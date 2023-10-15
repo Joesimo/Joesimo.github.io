@@ -18,22 +18,23 @@
     }
 
     #randomText {
-      font-size: 3em;
+      font-size: 2em;
       margin-bottom: 10px;
     }
 
     #datetime {
-      font-size: 5em;
+      font-size: 4em;
       margin-bottom: 10px;
     }
 
     #header {
-      font-size: 8em;
+      font-size: 10em;
       margin-bottom: 10px;
+      text-shadow: 4px 4px 6px rgba(255, 165, 0, 0.8); /* Orange Schattierung */
     }
 
     #countdown {
-      font-size: 4em;
+      font-size: 3em;
       margin-bottom: 10px;
     }
   </style>
@@ -113,23 +114,25 @@
       const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 
       if (width < 600) { // Mobile View
-        document.getElementById('randomText').style.fontSize = '2em';
+        document.getElementById('randomText').style.fontSize = '1.5em';
         document.getElementById('datetime').style.fontSize = '3em';
-        document.getElementById('header').style.fontSize = '4em';
+        document.getElementById('header').style.fontSize = '5em';
         document.getElementById('countdown').style.fontSize = '2em';
       } else { // Desktop View
-        document.getElementById('randomText').style.fontSize = '3em';
-        document.getElementById('datetime').style.fontSize = '5em';
-        document.getElementById('header').style.fontSize = '8em';
-        document.getElementById('countdown').style.fontSize = '4em';
+        document.getElementById('randomText').style.fontSize = '2em';
+        document.getElementById('datetime').style.fontSize = '4em';
+        document.getElementById('header').style.fontSize = '10em';
+        document.getElementById('countdown').style.fontSize = '3em';
       }
     }
 
     updateRandomText(); // Starte die Funktion für den zufälligen Text
-    setInterval(updateDateTime, 1000); // Aktualisiere Datum und Uhrzeit jede Sekunde
+    updateDateTime();
     updateCountdown();
+    setInterval(updateDateTime, 1000); // Aktualisiere Datum und Uhrzeit jede Sekunde
     updateFontSize();
   </script>
 
 </body>
 </html>
+```
