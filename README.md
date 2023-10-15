@@ -17,7 +17,7 @@
     }
 
     #header {
-      font-size: 10em; /* Doppelt so groß */
+      font-size: 15em; /* Doppelt so groß */
       margin-bottom: -20px; /* Mehr Abstand nach unten */
       text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
@@ -29,18 +29,18 @@
     }
 
     #datetime {
-      font-size: 0.5em; /* Kleiner */
+      font-size: 2.5em; /* Kleiner */
       margin-bottom: -50px; /* Mehr Abstand nach unten */
     }
 
     #countdown {
-      font-size: 0.5em; /* Etwas kleiner */
+      font-size: 1.5em; /* Etwas kleiner */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #randomText {
-      top: 0px;
-      font-size: 0.3em; /* Ziemlich klein */
+      bottom: 0px;
+      font-size: 0.8em; /* Ziemlich klein */
     }
   </style>
 </head>
@@ -95,7 +95,7 @@
         "Hoher Gürtel.",
         "Wusstest du, dass sich alle 11 Stunden die Zahl um 1 veringert?",
         "Wusstest du, dass Freddy ein Zollbeamter ist?",
-        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         ":)",
         "Hi Freddy.",
       ];
