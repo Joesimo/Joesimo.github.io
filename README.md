@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -17,30 +18,55 @@
     }
 
     #header {
-      font-size: 10em; /* Doppelt so groß */
+      font-size: 30vw; /* Relative Größe für die Breite des Viewports */
       margin-bottom: -20px; /* Mehr Abstand nach unten */
       text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #percentage {
-      font-size: 15em; /* Doppelt so groß */
+      font-size: 40vw; /* Relative Größe für die Breite des Viewports */
       margin-bottom: 10px; /* Weniger Abstand nach unten */
       text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #datetime {
-      font-size: 2.5em; /* Kleiner */
+      font-size: 5.5vw; /* Relative Größe für die Breite des Viewports */
       margin-bottom: -50px; /* Mehr Abstand nach unten */
     }
 
     #countdown {
-      font-size: 1.5em; /* Etwas kleiner */
+      font-size: 4vw; /* Relative Größe für die Breite des Viewports */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #randomText {
-      bottom: 0px;
-      font-size: 0.8em; /* Ziemlich klein */
+      position: absolute;
+      top: 5vw; /* Relative Position für die Breite des Viewports */
+      font-size: 3vw; /* Relative Größe für die Breite des Viewports */
+    }
+
+    @media (max-width: 768px) {
+      /* Stile speziell für Bildschirmgrößen bis 768px Breite */
+      #header {
+        font-size: 10vw;
+      }
+
+      #percentage {
+        font-size: 15vw;
+      }
+
+      #datetime {
+        font-size: 3vw;
+      }
+
+      #countdown {
+        font-size: 2.5vw;
+      }
+
+      #randomText {
+        top: 10vw;
+        font-size: 2vw;
+      }
     }
   </style>
 </head>
@@ -95,7 +121,7 @@
         "Hoher Gürtel.",
         "Wusstest du, dass sich alle 11 Stunden die Zahl um 1 veringert?",
         "Wusstest du, dass Freddy ein Zollbeamter ist?",
-        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         ":)",
         "Hi Freddy.",
       ];
