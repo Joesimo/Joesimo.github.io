@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="UTF-8">
@@ -18,23 +18,23 @@
     }
 
     #randomText {
-      font-size: 1.8em; /* Etwas kleiner */
-      margin-bottom: 10px; /* Weniger Abstand nach unten */
+      font-size: 1.7em; /* Etwas kleiner */
+      margin-bottom: 8px; /* Weniger Abstand nach unten */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Schattierung */
     }
 
     #datetime {
-      font-size: 2.8em; /* Kleiner */
+      font-size: 2.7em; /* Kleiner */
     }
 
     #percentage {
-      font-size: 9em; /* Größer */
+      font-size: 9.5em; /* Größer */
       margin-bottom: 10px; /* Weniger Abstand nach unten */
       text-shadow: 4px 4px 6px rgba(0, 0, 255, 0.8); /* Blaue Schattierung */
     }
 
     #countdown {
-      font-size: 2.3em; /* Etwas kleiner */
+      font-size: 2.2em; /* Etwas kleiner */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Schattierung */
     }
   </style>
@@ -55,7 +55,7 @@
       const hours = ('0' + now.getHours()).slice(-2);
       const minutes = ('0' + now.getMinutes()).slice(-2);
 
-      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' ' + hours + ':' + minutes;
+      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' | ' + hours + ':' + minutes;
     }
 
     function updateCountdown() {
