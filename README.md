@@ -17,7 +17,7 @@
     }
 
     #header {
-      font-size: 15em; /* Doppelt so groß */
+      font-size: 10em; /* Doppelt so groß */
       margin-bottom: -20px; /* Mehr Abstand nach unten */
       text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
