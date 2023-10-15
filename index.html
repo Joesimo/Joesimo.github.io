@@ -17,65 +17,34 @@
       height: 100vh;
     }
 
-    #header {
-      font-size: 30vw; /* Relative Größe für die Breite des Viewports */
-      margin-bottom: -20px; /* Mehr Abstand nach unten */
-      text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
-    }
-
-    #percentage {
-      font-size: 40vw; /* Relative Größe für die Breite des Viewports */
-      margin-bottom: 100px; /* Weniger Abstand nach unten */
-      text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
+    #randomText {
+      font-size: 1.5em; /* Ziemlich klein */
+      margin-bottom: 20px; /* Mehr Abstand nach unten */
     }
 
     #datetime {
-      font-size: 5.5vw; /* Relative Größe für die Breite des Viewports */
-      margin-bottom: -50px; /* Mehr Abstand nach unten */
+      font-size: 3em; /* Größer */
+      margin-bottom: 20px; /* Mehr Abstand nach unten */
+    }
+
+    #header {
+      font-size: 40em; /* Doppelt so groß */
+      margin-bottom: 10px; /* Weniger Abstand nach unten */
+      text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #countdown {
-      font-size: 4vw; /* Relative Größe für die Breite des Viewports */
+      font-size: 4em; /* Etwas kleiner */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
-    }
-
-    #randomText {
-      position: absolute;
-      top: 5vw; /* Relative Position für die Breite des Viewports */
-      font-size: 3vw; /* Relative Größe für die Breite des Viewports */
-    }
-
-    @media (max-width: 768px) {
-      /* Stile speziell für Bildschirmgrößen bis 768px Breite */
-      #header {
-        font-size: 10vw;
-      }
-
-      #percentage {
-        font-size: 15vw;
-      }
-
-      #datetime {
-        font-size: 3vw;
-      }
-
-      #countdown {
-        font-size: 2.5vw;
-      }
-
-      #randomText {
-        top: 10vw;
-        font-size: 2vw;
-      }
     }
   </style>
 </head>
 <body>
 
+  <div id="randomText"></div>
   <div id="datetime"></div>
   <div id="header">27%</div>
   <div id="countdown">9999999</div>
-  <div id="randomText"></div>
 
   <script>
     function updateDateTime() {
@@ -91,7 +60,7 @@
 
     function updateCountdown() {
       let countdown = localStorage.getItem('countdown') || 9999999;
-      const percentage = document.getElementById('percentage');
+      const percentage = document.getElementById('header');
 
       setInterval(function() {
         countdown--;
@@ -137,12 +106,9 @@
       }, 10000);
     }
 
-    updateDateTime();
     updateRandomText(); // Starte die Funktion für den zufälligen Text
-    setTimeout(function() {
-      updateCountdown();
-      setInterval(updateDateTime, 1000); // Aktualisiere Datum und Uhrzeit jede Sekunde
-    }, 0); // Starte den Countdown sofort
+    setInterval(updateDateTime, 1000); // Aktualisiere Datum und Uhrzeit jede Sekunde
+    updateCountdown();
   </script>
 
 </body>
