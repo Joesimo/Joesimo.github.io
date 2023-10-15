@@ -96,7 +96,7 @@
         "Hoher Gürtel.",
         "Wusstest du, dass sich alle 11 Stunden die Zahl um 1 veringert?",
         "Wusstest du, dass Freddy ein Zollbeamter ist?",
-        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         ":)",
         "Hi Freddy.",
       ];
