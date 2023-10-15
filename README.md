@@ -39,7 +39,7 @@
     }
 
     #randomText {
-      margin-top: 20px;
+      top: 0px;
       font-size: 1.5em; /* Ziemlich klein */
     }
   </style>
