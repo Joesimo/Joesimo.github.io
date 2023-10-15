@@ -17,30 +17,30 @@
     }
 
     #header {
-      font-size: 15em; /* Doppelt so groß */
+      font-size: 10em; /* Doppelt so groß */
       margin-bottom: -20px; /* Mehr Abstand nach unten */
       text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #percentage {
-      font-size: 20em; /* Doppelt so groß */
+      font-size: 15em; /* Doppelt so groß */
       margin-bottom: 10px; /* Weniger Abstand nach unten */
       text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #datetime {
-      font-size: 2em; /* Kleiner */
+      font-size: 0.5em; /* Kleiner */
       margin-bottom: -50px; /* Mehr Abstand nach unten */
     }
 
     #countdown {
-      font-size: 1.5em; /* Etwas kleiner */
+      font-size: 0.5em; /* Etwas kleiner */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #randomText {
       top: 0px;
-      font-size: 1.5em; /* Ziemlich klein */
+      font-size: 0.3em; /* Ziemlich klein */
     }
   </style>
 </head>
