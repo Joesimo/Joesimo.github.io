@@ -17,29 +17,28 @@
     }
 
     #header {
-      font-size: 30em; /* Doppelt so groß */
+      font-size: 15em; /* Doppelt so groß */
       margin-bottom: -20px; /* Mehr Abstand nach unten */
       text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #percentage {
-      font-size: 40em; /* Doppelt so groß */
+      font-size: 20em; /* Doppelt so groß */
       margin-bottom: 10px; /* Weniger Abstand nach unten */
       text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #datetime {
-      font-size: 5.5em; /* Kleiner */
+      font-size: 2em; /* Kleiner */
       margin-bottom: -50px; /* Mehr Abstand nach unten */
     }
 
     #countdown {
-      font-size: 4em; /* Etwas kleiner */
+      font-size: 1.5em; /* Etwas kleiner */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #randomText {
-      position: absolute;
       margin-top: 20px;
       font-size: 1.5em; /* Ziemlich klein */
     }
