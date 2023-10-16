@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background-color: #1a1a1a; /* Hellerer Hintergrund */
+      background-color: #1a1a1a; /* Dunklerer Hintergrund */
       color: white;
       font-family: Arial, sans-serif;
       text-align: center;
@@ -18,40 +18,41 @@
     }
 
     #header {
-      font-size: 30em; /* Doppelt so groß */
-      margin-bottom: -20px; /* Mehr Abstand nach unten */
+      font-size: 8em; /* Größer */
+      margin-bottom: -10px; /* Weniger Abstand nach unten */
       text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #percentage {
-      font-size: 40em; /* Doppelt so groß */
-      margin-bottom: 10px; /* Weniger Abstand nach unten */
-      text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
+      font-size: 6em; /* Größer */
+      margin-bottom: 10px; /* Mehr Abstand nach unten */
+      text-shadow: 4px 4px 6px rgba(0, 0, 255, 0.8); /* Blaue Schattierung */
     }
 
     #datetime {
-      font-size: 5.5em; /* Kleiner */
-      margin-bottom: -50px; /* Mehr Abstand nach unten */
+      font-size: 2em; /* Kleiner */
+      margin-bottom: 5px; /* Weniger Abstand nach unten */
     }
 
     #countdown {
-      font-size: 4em; /* Etwas kleiner */
+      font-size: 3em; /* Etwas kleiner */
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
+      margin-bottom: 20px; /* Mehr Abstand nach unten */
     }
 
     #randomText {
-      position: absolute;
-      top: 50px;
-      font-size: 1.5em; /* Ziemlich klein */
+      font-size: 1.2em; /* Kleiner */
+      margin-top: 10px; /* Mehr Abstand nach oben */
+      margin-bottom: 10px; /* Mehr Abstand nach unten */
     }
   </style>
 </head>
 <body>
 
   <div id="datetime"></div>
-  <div id="header">27%</div>
-  <div id="countdown">9999999</div>
   <div id="randomText"></div>
+  <div id="percentage">27%</div>
+  <div id="countdown">9999999</div>
 
   <script>
     function updateDateTime() {
@@ -62,13 +63,14 @@
       const hours = ('0' + now.getHours()).slice(-2);
       const minutes = ('0' + now.getMinutes()).slice(-2);
 
-      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' | ' + hours + ':' + minutes + ' Uhr';
+      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' | ' + hours + ':' + minutes;
     }
 
     function calculateCountdown() {
       const now = new Date();
-      const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Beispiel: Countdown bis zum nächsten Tag
-
+      const currentHour = now.getHours();
+      const nextScheduledHour = Math.ceil(currentHour / 5) * 5;
+      const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextScheduledHour, 0, 0, 0);
       const timeDifference = targetDate - now;
       const secondsRemaining = Math.floor(timeDifference / 1000);
 
@@ -91,11 +93,9 @@
         "Hi Freddy.",
       ];
 
-      // Zufälligen Text sofort anzeigen
       const randomIndex = Math.floor(Math.random() * textArray.length);
       document.getElementById('randomText').innerHTML = textArray[randomIndex];
 
-      // Ändere den Text alle 10 Sekunden
       setInterval(function() {
         const randomIndex = Math.floor(Math.random() * textArray.length);
         document.getElementById('randomText').innerHTML = textArray[randomIndex];
@@ -103,13 +103,13 @@
     }
 
     updateDateTime();
-    updateRandomText(); // Starte die Funktion für den zufälligen Text
-    calculateCountdown(); // Berechne den Countdown beim Laden der Seite
+    updateRandomText();
+    calculateCountdown();
 
     setInterval(function() {
       updateDateTime();
       calculateCountdown();
-    }, 1000); // Aktualisiere Datum, Uhrzeit und Countdown jede Sekunde
+    }, 1000);
   </script>
 
 </body>
