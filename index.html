@@ -17,42 +17,34 @@
       height: 100vh;
     }
 
-    #header {
-      font-size: 30em; /* Doppelt so groß */
-      margin-bottom: -20px; /* Mehr Abstand nach unten */
-      text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
-    }
-
-    #percentage {
-      font-size: 41em; /* Etwas größer */
-      margin-bottom: 10px; /* Weniger Abstand nach unten */
-      text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.5); /* Blaue Schattierung */
+    #randomText {
+      font-size: 1.7em; /* Etwas kleiner */
+      margin-bottom: 8px; /* Weniger Abstand nach unten */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Schattierung */
     }
 
     #datetime {
-      font-size: 4em; /* Etwas kleiner */
-      margin-bottom: -30px; /* Mehr Abstand nach oben */
+      font-size: 2.7em; /* Kleiner */
+    }
+
+    #percentage {
+      font-size: 9.5em; /* Größer */
+      margin-bottom: 10px; /* Weniger Abstand nach unten */
+      text-shadow: 4px 4px 6px rgba(0, 0, 255, 0.8); /* Blaue Schattierung */
     }
 
     #countdown {
-      font-size: 3em; /* Kleiner */
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
-    }
-
-    #randomText {
-      position: absolute;
-      top: 30px; /* Etwas höher */
-      font-size: 1.3em; /* Etwas kleiner */
+      font-size: 2.2em; /* Etwas kleiner */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Schattierung */
     }
   </style>
 </head>
 <body>
 
-  <div id="datetime"></div>
-  <div id="header">27%</div>
-  <div id="countdown">9999999</div>
   <div id="randomText"></div>
+  <div id="datetime"></div>
   <div id="percentage">27%</div>
+  <div id="countdown">99999</div>
 
   <script>
     function updateDateTime() {
@@ -63,7 +55,7 @@
       const hours = ('0' + now.getHours()).slice(-2);
       const minutes = ('0' + now.getMinutes()).slice(-2);
 
-      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' | ' + hours + ':' + minutes + ' Uhr';
+      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' | ' + hours + ':' + minutes;
     }
 
     function updateCountdown() {
@@ -76,7 +68,7 @@
         document.getElementById('countdown').innerHTML = countdown;
 
         if (countdown < 0) {
-          countdown = 9999999;
+          countdown = 99999;
           // Reduziere die Zahl um 1%
           let currentPercentage = parseInt(percentage.innerHTML);
           if (currentPercentage > 0) {
@@ -84,7 +76,7 @@
             percentage.innerHTML = currentPercentage + '%';
           }
         }
-      }, 3000); // Ändere die Intervallzeit hier (z.B., alle 3000 Millisekunden für 3 Sekunden)
+      }, 3); // Zählt insgesamt alle 5 Stunden auf 0 circa
     }
 
     function updateRandomText() {
@@ -96,7 +88,7 @@
         "JuLis sind doof :P",
         "EU4?",
         "Hoher Gürtel.",
-        "Wusstest du, dass sich alle 11 Stunden die Zahl um 1 veringert?",
+        "Wusstest du, dass je länger du auf der Seite bist, sich die Zahl verringert?",
         "Wusstest du, dass Freddy ein Zollbeamter ist?",
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         ":)",
