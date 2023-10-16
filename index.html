@@ -17,34 +17,41 @@
       height: 100vh;
     }
 
-    #randomText {
-      font-size: 1.7em; /* Etwas kleiner */
-      margin-bottom: 8px; /* Weniger Abstand nach unten */
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Schattierung */
-    }
-
-    #datetime {
-      font-size: 2.7em; /* Kleiner */
+    #header {
+      font-size: 30em; /* Doppelt so groß */
+      margin-bottom: -20px; /* Mehr Abstand nach unten */
+      text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
     }
 
     #percentage {
-      font-size: 9.5em; /* Größer */
+      font-size: 40em; /* Doppelt so groß */
       margin-bottom: 10px; /* Weniger Abstand nach unten */
-      text-shadow: 4px 4px 6px rgba(0, 0, 255, 0.8); /* Blaue Schattierung */
+      text-shadow: 8px 8px 10px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
+    }
+
+    #datetime {
+      font-size: 5.5em; /* Kleiner */
+      margin-bottom: -50px; /* Mehr Abstand nach unten */
     }
 
     #countdown {
-      font-size: 2.2em; /* Etwas kleiner */
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Schattierung */
+      font-size: 4em; /* Etwas kleiner */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Mehr Schattierung */
+    }
+
+    #randomText {
+      position: absolute;
+      top: 50px;
+      font-size: 1.5em; /* Ziemlich klein */
     }
   </style>
 </head>
 <body>
 
-  <div id="randomText"></div>
   <div id="datetime"></div>
-  <div id="percentage">27%</div>
-  <div id="countdown">99999</div>
+  <div id="header">27%</div>
+  <div id="countdown">999</div>
+  <div id="randomText"></div>
 
   <script>
     function updateDateTime() {
@@ -55,28 +62,22 @@
       const hours = ('0' + now.getHours()).slice(-2);
       const minutes = ('0' + now.getMinutes()).slice(-2);
 
-      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' | ' + hours + ':' + minutes;
+      document.getElementById('datetime').innerHTML = day + '.' + month + '.' + year + ' | ' + hours + ':' + minutes + ' Uhr';
     }
 
-    function updateCountdown() {
-      let countdown = localStorage.getItem('countdown') || 9999999;
-      const percentage = document.getElementById('percentage');
+    function calculateCountdown() {
+      const now = new Date();
+      const currentHour = now.getHours();
 
-      setInterval(function() {
-        countdown--;
-        localStorage.setItem('countdown', countdown);
-        document.getElementById('countdown').innerHTML = countdown;
+      // Berechne die nächste geplante Uhrzeit (hier auf die nächste Stunde gerundet)
+      const nextScheduledHour = Math.ceil(currentHour / 5) * 5;
 
-        if (countdown < 0) {
-          countdown = 99999;
-          // Reduziere die Zahl um 1%
-          let currentPercentage = parseInt(percentage.innerHTML);
-          if (currentPercentage > 0) {
-            currentPercentage--;
-            percentage.innerHTML = currentPercentage + '%';
-          }
-        }
-      }, 3); // Zählt insgesamt alle 5 Stunden auf 0 circa
+      const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextScheduledHour, 0, 0, 0);
+
+      const timeDifference = targetDate - now;
+      const secondsRemaining = Math.floor(timeDifference / 1000);
+
+      document.getElementById('countdown').innerHTML = secondsRemaining;
     }
 
     function updateRandomText() {
@@ -88,7 +89,7 @@
         "JuLis sind doof :P",
         "EU4?",
         "Hoher Gürtel.",
-        "Wusstest du, dass je länger du auf der Seite bist, sich die Zahl verringert?",
+        "Wusstest du, dass sich alle 5 Stunden die Zahl um 1 veringert?",
         "Wusstest du, dass Freddy ein Zollbeamter ist?",
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         ":)",
@@ -108,10 +109,12 @@
 
     updateDateTime();
     updateRandomText(); // Starte die Funktion für den zufälligen Text
-    setTimeout(function() {
-      updateCountdown();
-      setInterval(updateDateTime, 1000); // Aktualisiere Datum und Uhrzeit jede Sekunde
-    }, 0); // Starte den Countdown sofort
+    calculateCountdown(); // Berechne den Countdown beim Laden der Seite
+
+    setInterval(function() {
+      updateDateTime();
+      calculateCountdown();
+    }, 1000); // Aktualisiere Datum, Uhrzeit und Countdown jede Sekunde
   </script>
 
 </body>
