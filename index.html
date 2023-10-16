@@ -50,7 +50,7 @@
 
   <div id="datetime"></div>
   <div id="header">27%</div>
-  <div id="countdown">999</div>
+  <div id="countdown">9999999</div>
   <div id="randomText"></div>
 
   <script>
@@ -67,12 +67,7 @@
 
     function calculateCountdown() {
       const now = new Date();
-      const currentHour = now.getHours();
-
-      // Berechne die nächste geplante Uhrzeit (hier auf die nächste Stunde gerundet)
-      const nextScheduledHour = Math.ceil(currentHour / 5) * 5;
-
-      const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextScheduledHour, 0, 0, 0);
+      const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1); // Beispiel: Countdown bis zum nächsten Tag
 
       const timeDifference = targetDate - now;
       const secondsRemaining = Math.floor(timeDifference / 1000);
@@ -89,7 +84,7 @@
         "JuLis sind doof :P",
         "EU4?",
         "Hoher Gürtel.",
-        "Wusstest du, dass sich alle 5 Stunden die Zahl um 1 veringert?",
+        "Wusstest du, dass sich alle 11 Stunden die Zahl um 1 veringert?",
         "Wusstest du, dass Freddy ein Zollbeamter ist?",
         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         ":)",
