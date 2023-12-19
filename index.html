@@ -51,7 +51,7 @@
 
   <div id="randomText"></div>
   <div id="datetime"></div>
-  <div id="percentage">26%</div>
+  <div id="percentage">16%</div>
   <div id="countdown">18000</div>
 
   <script>
@@ -99,7 +99,7 @@
       setInterval(function() {
         const randomIndex = Math.floor(Math.random() * textArray.length);
         document.getElementById('randomText').innerHTML = textArray[randomIndex];
-      }, 10000);
+      }, 18000);
     }
 
     updateDateTime();
@@ -109,7 +109,7 @@
     setInterval(function() {
       updateDateTime();
       calculateCountdown();
-    }, 1000);
+    }, 18000);
   </script>
 
 </body>
