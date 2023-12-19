@@ -69,7 +69,7 @@
     function calculateCountdown() {
       const now = new Date();
       const currentHour = now.getHours();
-      const nextScheduledHour = Math.ceil(currentHour / 1) * 1;
+      const nextScheduledHour = Math.ceil(currentHour / 2) * 2;
       const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextScheduledHour, 0, 0, 0);
       const timeDifference = targetDate - now;
       const secondsRemaining = Math.floor(timeDifference / 10);
