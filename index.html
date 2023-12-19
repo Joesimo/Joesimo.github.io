@@ -52,7 +52,7 @@
   <div id="randomText"></div>
   <div id="datetime"></div>
   <div id="percentage">16%</div>
-  <div id="countdown">18000</div>
+  <div id="countdown">10</div>
 
   <script>
     function updateDateTime() {
@@ -72,7 +72,7 @@
       const nextScheduledHour = Math.ceil(currentHour / 5) * 5;
       const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextScheduledHour, 0, 0, 0);
       const timeDifference = targetDate - now;
-      const secondsRemaining = Math.floor(timeDifference / 1000);
+      const secondsRemaining = Math.floor(timeDifference / 10);
 
       document.getElementById('countdown').innerHTML = secondsRemaining;
     }
@@ -99,7 +99,7 @@
       setInterval(function() {
         const randomIndex = Math.floor(Math.random() * textArray.length);
         document.getElementById('randomText').innerHTML = textArray[randomIndex];
-      }, 18000);
+      }, 10);
     }
 
     updateDateTime();
@@ -109,7 +109,7 @@
     setInterval(function() {
       updateDateTime();
       calculateCountdown();
-    }, 18000);
+    }, 10);
   </script>
 
 </body>
