@@ -102,7 +102,7 @@ function row(l, student, settings) {
         </div>
       </div>
       <div class="list-right">
-        ${badge(st.label, st.badge)}
+        <span class="hide-sm">${badge(st.label, st.badge)}</span>
         <span class="small muted">${esc(money(lessonFee(l, student, settings), settings.currency))}</span>
       </div>
       <div class="row" style="gap:2px;flex:none">
