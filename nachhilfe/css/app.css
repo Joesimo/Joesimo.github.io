@@ -827,6 +827,9 @@ button.list-row {
   /* Hauptaktion über die volle Breite statt rechts angeklebt */
   .row-wrap > .spacer { display: none; }
   .row-wrap > .btn-primary { flex: 1 1 100%; }
+
+  /* Überschrift und Statusabzeichen dürfen umbrechen */
+  .card-head { flex-wrap: wrap; }
   .grid-4.keep-2, .grid-2.keep-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .stat-value { font-size: 23px; }

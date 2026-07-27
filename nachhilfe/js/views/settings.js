@@ -1,18 +1,20 @@
-/** Einstellungen: Profil, Darstellung, Cloud-Sync, Datenverwaltung. */
+/** Einstellungen: Profil, Darstellung, Datei-Synchronisation, Datenverwaltung. */
 
 import { store, DEFAULT_SETTINGS } from '../store.js';
-import { sync } from '../sync.js';
-import { suggestPassphrase, cryptoAvailable } from '../crypto.js';
+import { fileSync, exportFile, shareFile, readFile } from '../filesync.js';
+import { cryptoAvailable } from '../crypto.js';
 import { formModal, confirmDialog, modal, toast } from '../ui.js';
 import { icon } from '../icons.js';
-import { html, esc, download, today, money } from '../util.js';
+import { html, esc, money } from '../util.js';
 import { applyTheme } from '../theme.js';
 
-const fmtTime = (ts) => (ts ? new Date(ts).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' }) : 'noch nie');
+const fmtTime = (ts) => (ts
+  ? new Date(ts).toLocaleString('de-DE', { dateStyle: 'short', timeStyle: 'short' })
+  : 'noch nie');
 
 export function render() {
   const s = store.settings;
-  const status = sync.status();
+  const sync = fileSync.status();
   const counts = {
     students: store.all('students').length,
     lessons: store.all('lessons').length,
@@ -43,34 +45,29 @@ export function render() {
 
       <section class="card">
         <div class="card-head">
-          <h2>Synchronisation</h2>
+          <h2>Datei-Synchronisation</h2>
           <div class="spacer"></div>
-          <span class="badge ${statusBadge(status.state)}">${esc(statusLabel(status.state))}</span>
+          <span class="badge ${statusBadge(sync.state)}">${esc(statusLabel(sync.state))}</span>
         </div>
-
-        ${!cryptoAvailable() ? html`
-          <div class="card-pad" style="padding-top:0">
-            <div class="callout callout-warn">
-              Verschlüsselung steht nicht zur Verfügung. Die Seite muss über <strong>https://</strong> geladen werden –
-              über <code>file://</code> funktioniert die Synchronisation nicht.
-            </div>
-          </div>` : ''}
-
-        <div class="card-pad" style="padding-top:0">
-          ${syncBody(status)}
-        </div>
+        <div class="card-pad" style="padding-top:0">${syncBody(sync)}</div>
       </section>
 
       <section class="card">
-        <div class="card-head"><h2>Daten</h2></div>
+        <div class="card-head"><h2>Daten übertragen & sichern</h2></div>
         <div class="card-pad" style="padding-top:0">
           <p class="small muted" style="margin-bottom:var(--sp-3)">
             ${counts.students} Schüler · ${counts.lessons} Stunden · ${counts.grades} Noten.
-            Alles liegt auf diesem Gerät${status.state === 'on' ? ' und verschlüsselt in deiner Cloud' : ''}.
+            Beim Einlesen werden Daten standardmäßig <strong>zusammengeführt</strong> – es geht also nichts verloren,
+            wenn du auf beiden Geräten etwas eingetragen hast.
           </p>
           <div class="row row-wrap" style="gap:var(--sp-2)">
-            <button class="btn" data-act="export">${icon('download', { size: 16 })} Backup exportieren</button>
-            <button class="btn" data-act="import">${icon('upload', { size: 16 })} Backup einlesen</button>
+            <button class="btn btn-primary" data-act="share">${icon('upload', { size: 16 })} Daten senden</button>
+            <button class="btn" data-act="import">${icon('download', { size: 16 })} Datei einlesen</button>
+            <button class="btn" data-act="export">${icon('note', { size: 16 })} Backup speichern</button>
+          </div>
+          <hr class="divider" style="margin:var(--sp-4) 0">
+          <div class="row row-wrap" style="gap:var(--sp-2)">
+            <span class="small muted">Setzt dieses Gerät vollständig zurück.</span>
             <div class="spacer"></div>
             <button class="btn btn-danger" data-act="wipe">${icon('trash', { size: 16 })} Alles löschen</button>
           </div>
@@ -78,21 +75,20 @@ export function render() {
       </section>
 
       <section class="card">
-        <div class="card-head"><h2>Datenschutz</h2></div>
+        <div class="card-head"><h2>Wo deine Daten liegen</h2></div>
         <div class="card-pad" style="padding-top:0">
-          <p class="small" style="color:var(--text-2);line-height:1.6">
-            Du verarbeitest hier personenbezogene Daten – meist von Minderjährigen. Deshalb:
-          </p>
-          <ul class="small" style="color:var(--text-2);line-height:1.7;margin-top:8px;padding-left:18px;list-style:disc">
-            <li>Die Daten liegen lokal in deinem Browser. Ohne eingerichtete Synchronisation verlassen sie das Gerät nie.</li>
-            <li>Beim Hochladen werden sie <strong>vor</strong> dem Versand verschlüsselt (AES-256). Der Server speichert nur unlesbaren Chiffretext.</li>
-            <li>Verlierst du dein Sync-Passwort, ist die Cloud-Kopie nicht wiederherstellbar – das ist der Preis echter Verschlüsselung. Leg ein Backup an.</li>
-            <li>Notiere nur, was du wirklich brauchst, und lösche Schülerakten, wenn die Nachhilfe endet.</li>
+          <ul class="small" style="color:var(--text-2);line-height:1.7;padding-left:18px;list-style:disc">
+            <li>Alles bleibt auf deinen Geräten. Es gibt keinen Server, kein Konto und keine Übertragung im Hintergrund.</li>
+            <li>Du verarbeitest personenbezogene Daten, meist von Minderjährigen – erfasse nur, was du wirklich brauchst,
+                und lösche Schülerakten, wenn die Nachhilfe endet.</li>
+            <li>Legst du die Datei in einen Ordner, den ein anderes Programm abgleicht (iCloud, Dropbox, Nextcloud),
+                verlässt sie dein Gerät. Schalte dann unter „Datei-Synchronisation“ die Verschlüsselung ein.</li>
+            <li>Ein Backup gehört an einen zweiten Ort. Geht das Handy verloren, sind die Daten sonst weg.</li>
           </ul>
         </div>
       </section>
 
-      <p class="small muted center">Nachhilfe Manager · lokal gespeichert · <a href="SETUP.md">Einrichtung der Synchronisation</a></p>
+      <p class="small muted center">Nachhilfe Manager · <a href="SETUP.md">Anleitung zur Synchronisation</a></p>
     </div>`;
 }
 
@@ -109,65 +105,72 @@ function settingRow(label, value, hint, act) {
 }
 
 const statusLabel = (state) => ({
-  off: 'nicht eingerichtet',
-  signedout: 'nicht angemeldet',
-  locked: 'Passwort fehlt',
-  busy: 'synchronisiert …',
+  unsupported: 'nur manuell',
+  off: 'nicht verknüpft',
+  'needs-permission': 'Zugriff bestätigen',
+  busy: 'gleicht ab …',
   error: 'Fehler',
   on: 'aktiv',
 }[state] || state);
 
 const statusBadge = (state) => ({
-  on: 'badge-ok', busy: 'badge-info', error: 'badge-danger', locked: 'badge-warn', signedout: 'badge-warn',
+  on: 'badge-ok', busy: 'badge-info', error: 'badge-danger', 'needs-permission': 'badge-warn',
 }[state] || '');
 
-function syncBody(status) {
-  if (!sync.configured) {
+/* ------------------------------------------------------------------ */
+
+function syncBody(sync) {
+  if (sync.state === 'unsupported') {
     return html`
       <p class="small" style="color:var(--text-2);line-height:1.6">
-        Ohne Synchronisation liegen deine Daten nur auf diesem Gerät. Verbinde einen kostenlosen
-        Supabase-Account, um Handy, Tablet und Laptop auf dem gleichen Stand zu halten –
-        Ende-zu-Ende-verschlüsselt.
+        Dieser Browser darf aus Sicherheitsgründen nicht dauerhaft auf Dateien zugreifen – das betrifft alle
+        Handy-Browser sowie Firefox und Safari. Der Abgleich läuft hier über <strong>Daten senden</strong> und
+        <strong>Datei einlesen</strong> im Abschnitt darunter.
       </p>
-      <div class="row" style="margin-top:var(--sp-3);gap:var(--sp-2)">
-        <button class="btn btn-primary" data-act="sync-setup">${icon('cloud', { size: 16 })} Synchronisation einrichten</button>
-        <a class="btn btn-ghost" href="SETUP.md">Anleitung</a>
+      <div class="callout callout-info" style="margin-top:var(--sp-3)">
+        In der Praxis: Am Rechner Chrome oder Edge benutzen und die Datei dort dauerhaft verknüpfen. Vom Handy
+        schickst du deine Änderungen mit „Daten senden“ hinüber – dort einlesen, fertig. Nichts wird überschrieben,
+        beide Stände werden zusammengeführt.
       </div>`;
   }
 
-  if (!sync.signedIn) {
+  if (sync.state === 'needs-permission') {
     return html`
-      <p class="small muted">Server verbunden. Melde dich an, um zu synchronisieren.</p>
-      <div class="row" style="margin-top:var(--sp-3);gap:var(--sp-2)">
-        <button class="btn btn-primary" data-act="sync-login">Anmelden</button>
-        <button class="btn" data-act="sync-register">Konto anlegen</button>
-        <div class="spacer"></div>
-        <button class="btn btn-ghost" data-act="sync-config">Server ändern</button>
+      <div class="callout callout-warn">
+        Die Datei <strong>${esc(sync.name)}</strong> ist noch verknüpft, der Browser braucht aber nach dem Neustart
+        deine Bestätigung.
+      </div>
+      <div class="row row-wrap" style="margin-top:var(--sp-3);gap:var(--sp-2)">
+        <button class="btn btn-primary" data-act="resume">${icon('refresh', { size: 16 })} Zugriff erlauben</button>
+        <button class="btn btn-ghost" data-act="unlink">Verknüpfung lösen</button>
       </div>`;
   }
 
-  if (!sync.unlocked) {
+  if (sync.state === 'off') {
     return html`
-      <div class="callout callout-warn">Das Sync-Passwort fehlt auf diesem Gerät. Ohne dieses Passwort lassen sich die Daten nicht entschlüsseln.</div>
-      <div class="row" style="margin-top:var(--sp-3);gap:var(--sp-2)">
-        <button class="btn btn-primary" data-act="sync-pass">${icon('key', { size: 16 })} Passwort eingeben</button>
-        <button class="btn btn-ghost" data-act="sync-logout">Abmelden</button>
+      <p class="small" style="color:var(--text-2);line-height:1.6">
+        Verknüpfe eine Datei, dann schreibt die App jede Änderung von selbst hinein und liest beim Öffnen,
+        was inzwischen darin steht. Legst du diese Datei in einen Ordner, den iCloud, Dropbox oder Nextcloud
+        ohnehin abgleicht, sind deine Rechner automatisch auf demselben Stand.
+      </p>
+      <div class="row row-wrap" style="margin-top:var(--sp-3);gap:var(--sp-2)">
+        <button class="btn btn-primary" data-act="link-new">${icon('plus', { size: 16 })} Neue Datei anlegen</button>
+        <button class="btn" data-act="link-open">${icon('note', { size: 16 })} Vorhandene Datei wählen</button>
       </div>`;
   }
 
   return html`
     <dl class="kv">
-      <dt>Konto</dt><dd>${esc(status.email)}</dd>
-      <dt>Zuletzt</dt><dd>${esc(fmtTime(status.lastSync))}</dd>
-      <dt>Verschlüsselung</dt><dd>AES-256-GCM, Schlüssel nur auf deinen Geräten</dd>
-      ${status.state === 'error' ? `<dt>Fehler</dt><dd style="color:var(--danger)">${esc(status.message)}</dd>` : ''}
+      <dt>Datei</dt><dd class="strong">${esc(sync.name)}</dd>
+      <dt>Zuletzt</dt><dd>${esc(fmtTime(sync.lastSync))}</dd>
+      <dt>Verschlüsselt</dt><dd>${sync.encrypt ? 'ja – ohne Passwort nicht lesbar' : 'nein – Klartext auf deiner Festplatte'}</dd>
+      ${sync.state === 'error' ? `<dt>Fehler</dt><dd style="color:var(--danger)">${esc(sync.message)}</dd>` : ''}
     </dl>
     <div class="row row-wrap" style="margin-top:var(--sp-3);gap:var(--sp-2)">
-      <button class="btn btn-primary" data-act="sync-now">${icon('refresh', { size: 16 })} Jetzt synchronisieren</button>
-      <button class="btn" data-act="sync-show-pass">${icon('key', { size: 16 })} Passwort anzeigen</button>
+      <button class="btn btn-primary" data-act="sync-now">${icon('refresh', { size: 16 })} Jetzt abgleichen</button>
+      <button class="btn" data-act="encrypt">${icon('lock', { size: 16 })} ${sync.encrypt ? 'Verschlüsselung ändern' : 'Datei verschlüsseln'}</button>
       <div class="spacer"></div>
-      <button class="btn btn-ghost" data-act="sync-logout">Abmelden</button>
-      <button class="btn btn-danger" data-act="sync-disconnect">Trennen</button>
+      <button class="btn btn-ghost" data-act="unlink">Verknüpfung lösen</button>
     </div>`;
 }
 
@@ -176,7 +179,6 @@ function syncBody(status) {
 /* ------------------------------------------------------------------ */
 
 async function editProfile(ctx) {
-  const s = store.settings;
   const fields = [
     { name: 'tutorName', label: 'Dein Name', type: 'text', span: 2, placeholder: 'z. B. Yassin' },
     { name: 'defaultRate', label: 'Standard-Stundensatz (€/60 min)', type: 'money' },
@@ -191,119 +193,89 @@ async function editProfile(ctx) {
     { name: 'currency', label: 'Währung', type: 'select', options: ['EUR', 'CHF', 'USD', 'GBP'] },
   ];
 
-  const data = await formModal({ title: 'Profil & Vorgaben', fields, values: s });
+  const data = await formModal({ title: 'Profil & Vorgaben', fields, values: store.settings });
   if (!data) return;
   store.updateSettings({ ...data, defaultRate: Number(data.defaultRate) || DEFAULT_SETTINGS.defaultRate });
   toast('Gespeichert');
   ctx.refresh();
 }
 
-async function setupSync(ctx) {
-  const data = await formModal({
-    title: 'Synchronisation einrichten',
-    submitLabel: 'Verbinden',
-    fields: [
-      { name: 'url', label: 'Projekt-URL', type: 'text', required: true, span: 2, placeholder: 'https://xxxx.supabase.co' },
-      { name: 'anonKey', label: 'anon public key', type: 'text', required: true, span: 2, placeholder: 'eyJhbGciOi…' },
-    ],
-    values: { url: sync.cfg.url, anonKey: sync.cfg.anonKey },
-    extra: html`
-      <div class="callout callout-info" style="margin-top:var(--sp-3)">
-        Beides findest du in deinem Supabase-Projekt unter <strong>Project Settings → API</strong>.
-        Die Schritt-für-Schritt-Anleitung inklusive SQL steht in <a href="SETUP.md">SETUP.md</a>.
-        Der <em>anon key</em> ist ein öffentlicher Schlüssel – der Zugriff wird über dein Konto und
-        Row Level Security geschützt.
-      </div>`,
-    validate: (d) => (/^https:\/\/.+/.test(d.url) ? null : 'Die URL muss mit https:// beginnen'),
+/** Fragt ein Passwort ab – für verschlüsselte Dateien. */
+function askPassphrase({ title, hint, submitLabel = 'Weiter' }) {
+  return formModal({
+    title,
+    submitLabel,
+    fields: [{ name: 'pass', label: 'Passwort', type: 'text', required: true, span: 2, hint }],
+    validate: (d) => (String(d.pass).length >= 6 ? null : 'Mindestens 6 Zeichen'),
   });
-  if (!data) return;
-
-  sync.configure({ url: data.url, anonKey: data.anonKey });
-  toast('Server gespeichert – jetzt anmelden');
-  ctx.refresh();
 }
 
-async function authDialog(ctx, mode) {
-  const isRegister = mode === 'register';
-  const data = await formModal({
-    title: isRegister ? 'Konto anlegen' : 'Anmelden',
-    submitLabel: isRegister ? 'Konto anlegen' : 'Anmelden',
-    fields: [
-      { name: 'email', label: 'E-Mail', type: 'email', required: true, span: 2, autocomplete: 'username' },
-      { name: 'password', label: 'Passwort', type: 'password', required: true, span: 2, autocomplete: isRegister ? 'new-password' : 'current-password' },
-    ],
-    extra: isRegister ? html`
-      <div class="callout callout-info" style="margin-top:var(--sp-3)">
-        Dieses Konto dient nur der Anmeldung am Server. Für die Verschlüsselung deiner Daten
-        vergibst du gleich danach ein separates Sync-Passwort.
-      </div>` : '',
-  });
-  if (!data) return;
-
-  try {
-    if (isRegister) {
-      const res = await sync.signUp(data.email, data.password);
-      if (!sync.signedIn) {
-        toast('Bestätige zuerst die E-Mail, dann anmelden', 'ok', 5000);
-        void res;
-        return ctx.refresh();
-      }
-    } else {
-      await sync.signIn(data.email, data.password);
-    }
-    toast('Angemeldet');
-    ctx.refresh();
-    if (!sync.unlocked) await passphraseDialog(ctx, true);
-  } catch (err) {
-    toast(err.message, 'err', 5000);
+async function toggleEncryption(ctx) {
+  if (!cryptoAvailable()) {
+    return toast('Verschlüsselung braucht eine über https geladene Seite', 'err', 5000);
   }
-}
 
-async function passphraseDialog(ctx, firstTime = false) {
-  const suggested = firstTime ? suggestPassphrase() : '';
-  const data = await formModal({
-    title: firstTime ? 'Sync-Passwort festlegen' : 'Sync-Passwort eingeben',
-    submitLabel: 'Übernehmen',
-    fields: [
-      {
-        name: 'pass', label: 'Sync-Passwort', type: 'text', required: true, span: 2,
-        value: suggested,
-        hint: 'Auf jedem Gerät identisch eingeben. Ohne dieses Passwort sind die Cloud-Daten nicht lesbar.',
-      },
-      { name: 'remember', label: 'Auf diesem Gerät merken', type: 'switch', span: 2, value: true },
-    ],
-    extra: firstTime ? html`
-      <div class="callout callout-warn" style="margin-top:var(--sp-3)">
-        Schreib dieses Passwort auf. Es wird nirgendwo gespeichert außer auf deinen Geräten –
-        wir können es nicht zurücksetzen.
-      </div>` : '',
-    validate: (d) => (String(d.pass).length >= 8 ? null : 'Mindestens 8 Zeichen'),
+  if (fileSync.cfg.encrypt) {
+    const off = await confirmDialog({
+      title: 'Verschlüsselung abschalten?',
+      message: 'Die Datei wird danach im Klartext gespeichert – jeder mit Zugriff auf den Ordner kann sie lesen.',
+      confirmLabel: 'Abschalten',
+    });
+    if (!off) return;
+    fileSync.saveCfg({ encrypt: false });
+    fileSync.setPassphrase(null);
+    await fileSync.run('push');
+    toast('Verschlüsselung abgeschaltet');
+    return ctx.refresh();
+  }
+
+  const data = await askPassphrase({
+    title: 'Datei verschlüsseln',
+    hint: 'Merk dir dieses Passwort. Ohne es lässt sich die Datei nicht mehr lesen – auch von mir nicht.',
+    submitLabel: 'Verschlüsseln',
   });
   if (!data) return;
 
-  sync.setPassphrase(data.pass, data.remember !== false);
-  toast('Passwort übernommen');
+  fileSync.setPassphrase(data.pass);
+  fileSync.saveCfg({ encrypt: true });
+  await fileSync.run('push');
+  toast('Datei ist jetzt verschlüsselt');
   ctx.refresh();
-  sync.run('auto');
 }
 
-function showPassphrase() {
-  modal({
-    title: 'Sync-Passwort',
-    body: html`
-      <p class="small muted">Gib genau dieses Passwort auf deinen anderen Geräten ein.</p>
-      <div class="input mono" style="user-select:all;padding:12px;font-size:16px;text-align:center">${esc(sync.passphrase || '')}</div>
-      <button class="btn btn-block" data-copy>${icon('copy', { size: 16 })} Kopieren</button>`,
-    onMount(root) {
-      root.querySelector('[data-copy]').addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(sync.passphrase || '');
-          toast('Kopiert');
-        } catch {
-          toast('Kopieren nicht möglich – bitte markieren', 'err');
-        }
-      });
-    },
+/** Lässt wählen, ob eingelesene Daten ergänzt oder alles ersetzt wird. */
+function askImportMode() {
+  return new Promise((resolve) => {
+    let mode = null;
+    modal({
+      title: 'Wie sollen die Daten übernommen werden?',
+      body: html`
+        <div class="list card" style="overflow:hidden">
+          <button class="list-row" data-mode="merge">
+            <span style="color:var(--ok)">${icon('check', { size: 20 })}</span>
+            <span class="list-main">
+              <span class="list-title">Zusammenführen</span>
+              <span class="list-sub">Empfohlen. Neuere Einträge gewinnen, nichts geht verloren.</span>
+            </span>
+          </button>
+          <button class="list-row" data-mode="replace">
+            <span style="color:var(--danger)">${icon('alert', { size: 20 })}</span>
+            <span class="list-main">
+              <span class="list-title">Ersetzen</span>
+              <span class="list-sub">Verwirft alles auf diesem Gerät und übernimmt nur die Datei.</span>
+            </span>
+          </button>
+        </div>`,
+      onMount(root, close) {
+        root.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-mode]');
+          if (!btn) return;
+          mode = btn.dataset.mode;
+          close();
+        });
+      },
+      onClose: () => resolve(mode),
+    });
   });
 }
 
@@ -311,25 +283,54 @@ function importBackup(ctx) {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'application/json,.json';
+
   input.addEventListener('change', async () => {
     const file = input.files?.[0];
     if (!file) return;
-    const text = await file.text();
-    const replace = await confirmDialog({
-      title: 'Backup einlesen',
-      message: 'Zusammenführen behält deine aktuellen Daten und ergänzt fehlende. Ersetzen verwirft alles Lokale.',
-      confirmLabel: 'Ersetzen',
-      danger: true,
-    });
+
     try {
-      store.import(text, replace ? 'replace' : 'merge');
-      toast(replace ? 'Daten ersetzt' : 'Daten zusammengeführt');
+      let data;
+      try {
+        data = await readFile(file);
+      } catch (err) {
+        if (!err.needsPassphrase) throw err;
+        const answer = await askPassphrase({
+          title: 'Datei ist verschlüsselt',
+          hint: 'Gib das Passwort ein, mit dem die Datei gesichert wurde.',
+          submitLabel: 'Einlesen',
+        });
+        if (!answer) return;
+        data = await readFile(file, answer.pass);
+      }
+
+      const mode = await askImportMode();
+      if (!mode) return;
+
+      const before = store.all('students').length + store.all('lessons').length + store.all('grades').length;
+      store.import(data, mode);
+      const after = store.all('students').length + store.all('lessons').length + store.all('grades').length;
+
+      toast(mode === 'replace'
+        ? 'Daten ersetzt'
+        : `Zusammengeführt – ${Math.max(0, after - before)} neue Einträge`);
       ctx.refresh();
     } catch (err) {
-      toast('Import fehlgeschlagen: ' + err.message, 'err', 5000);
+      toast('Einlesen fehlgeschlagen: ' + err.message, 'err', 5000);
     }
   });
+
   input.click();
+}
+
+async function sendData() {
+  const pass = fileSync.cfg.encrypt ? fileSync.passphrase : null;
+  try {
+    if (await shareFile(pass)) return;
+  } catch {
+    return; // Nutzer hat den Teilen-Dialog abgebrochen
+  }
+  await exportFile(pass);
+  toast('Datei gespeichert – auf dem anderen Gerät einlesen', 'ok', 4000);
 }
 
 /* ------------------------------------------------------------------ */
@@ -346,58 +347,75 @@ export function mount(root, ctx) {
     const act = e.target.closest('[data-act]')?.dataset.act;
     if (!act) return;
 
-    switch (act) {
-      case 'profile': return editProfile(ctx);
+    try {
+      switch (act) {
+        case 'profile': return await editProfile(ctx);
 
-      case 'export':
-        download(`nachhilfe-backup-${today()}.json`, store.export());
-        return toast('Backup gespeichert');
+        case 'share': return await sendData();
+        case 'import': return importBackup(ctx);
 
-      case 'import': return importBackup(ctx);
+        case 'export':
+          await exportFile(fileSync.cfg.encrypt ? fileSync.passphrase : null);
+          return toast('Backup gespeichert');
 
-      case 'wipe': {
-        const ok = await confirmDialog({
-          title: 'Wirklich alles löschen?',
-          message: 'Sämtliche Schüler, Stunden und Noten auf diesem Gerät werden entfernt. Exportiere vorher ein Backup.',
-          confirmLabel: 'Alles löschen',
-        });
-        if (!ok) return;
-        store.wipe();
-        toast('Alle Daten gelöscht');
-        return ctx.refresh();
+        case 'wipe': {
+          const ok = await confirmDialog({
+            title: 'Wirklich alles löschen?',
+            message: 'Sämtliche Schüler, Stunden und Noten auf diesem Gerät werden entfernt. Speichere vorher ein Backup.',
+            confirmLabel: 'Alles löschen',
+          });
+          if (!ok) return;
+          store.wipe();
+          toast('Alle Daten gelöscht');
+          return ctx.refresh();
+        }
+
+        case 'link-new':
+          await fileSync.createFile();
+          toast('Datei verknüpft – Änderungen landen ab jetzt automatisch darin');
+          return ctx.refresh();
+
+        case 'link-open':
+          await fileSync.openFile();
+          toast('Datei verknüpft und abgeglichen');
+          return ctx.refresh();
+
+        case 'resume': {
+          const ok = await fileSync.restore({ interactive: true });
+          if (ok) {
+            await fileSync.run('auto');
+            toast('Verbunden');
+          } else {
+            toast('Zugriff wurde nicht erteilt', 'err');
+          }
+          return ctx.refresh();
+        }
+
+        case 'sync-now':
+          await fileSync.run('auto');
+          ctx.refresh();
+          return toast(fileSync.error ? fileSync.error.message : 'Abgeglichen',
+            fileSync.error ? 'err' : 'ok');
+
+        case 'encrypt': return await toggleEncryption(ctx);
+
+        case 'unlink': {
+          const ok = await confirmDialog({
+            title: 'Verknüpfung lösen?',
+            message: 'Die Datei bleibt erhalten, wird aber nicht mehr automatisch aktualisiert.',
+            confirmLabel: 'Lösen',
+          });
+          if (!ok) return;
+          await fileSync.unlink();
+          toast('Verknüpfung gelöst');
+          return ctx.refresh();
+        }
+
+        default:
       }
-
-      case 'sync-setup': return setupSync(ctx);
-      case 'sync-config': return setupSync(ctx);
-      case 'sync-login': return authDialog(ctx, 'login');
-      case 'sync-register': return authDialog(ctx, 'register');
-      case 'sync-pass': return passphraseDialog(ctx, false);
-      case 'sync-show-pass': return showPassphrase();
-
-      case 'sync-now':
-        await sync.run('push');
-        ctx.refresh();
-        return toast(sync.status().state === 'error' ? sync.status().message : 'Synchronisiert',
-          sync.status().state === 'error' ? 'err' : 'ok');
-
-      case 'sync-logout':
-        await sync.signOut();
-        toast('Abgemeldet');
-        return ctx.refresh();
-
-      case 'sync-disconnect': {
-        const ok = await confirmDialog({
-          title: 'Synchronisation trennen?',
-          message: 'Die lokalen Daten bleiben erhalten. Die verschlüsselte Kopie in der Cloud wird nicht gelöscht.',
-          confirmLabel: 'Trennen',
-        });
-        if (!ok) return;
-        sync.disconnect();
-        toast('Getrennt');
-        return ctx.refresh();
-      }
-
-      default:
+    } catch (err) {
+      if (err?.name === 'AbortError') return; // Dateiauswahl abgebrochen
+      toast(err.message || 'Etwas ist schiefgelaufen', 'err', 5000);
     }
   });
 

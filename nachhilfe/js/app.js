@@ -8,7 +8,7 @@
  */
 
 import { store } from './store.js';
-import { sync } from './sync.js';
+import { fileSync } from './filesync.js';
 import { icon } from './icons.js';
 import { html, esc, debounce } from './util.js';
 import { applyTheme, watchSystemTheme } from './theme.js';
@@ -74,7 +74,7 @@ function navItems(mobile = false) {
 
 function shellHtml() {
   const route = ROUTES[app.route];
-  const s = sync.status();
+  const s = fileSync.status();
 
   return html`
     <div class="shell">
@@ -157,16 +157,17 @@ function navBadge(key) {
 }
 
 const syncDotClass = (state) => ({
-  on: 'on', busy: 'busy', error: 'err', locked: 'warn', signedout: 'warn', off: 'off',
+  on: 'on', busy: 'busy', error: 'err', 'needs-permission': 'warn',
 }[state] || 'off');
 
 function syncText(s) {
   switch (s.state) {
-    case 'on': return s.lastSync ? 'Synchron · ' + new Date(s.lastSync).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) : 'Verbunden';
-    case 'busy': return 'Synchronisiert …';
-    case 'error': return 'Sync-Fehler';
-    case 'locked': return 'Passwort fehlt';
-    case 'signedout': return 'Nicht angemeldet';
+    case 'on': return s.lastSync
+      ? 'Datei aktuell · ' + new Date(s.lastSync).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
+      : 'Datei verknüpft';
+    case 'busy': return 'Gleicht ab …';
+    case 'error': return 'Datei-Fehler';
+    case 'needs-permission': return 'Zugriff bestätigen';
     default: return 'Nur auf diesem Gerät';
   }
 }
@@ -294,10 +295,10 @@ function boot() {
 
   window.addEventListener('hashchange', navigate);
   store.onChange(() => refreshAll());
-  sync.addEventListener('status', () => refreshAll());
+  fileSync.addEventListener('status', () => refreshAll());
 
   navigate();
-  sync.start();
+  fileSync.start();
 
   // Tastenkürzel: n = neu, / = suchen
   document.addEventListener('keydown', async (e) => {

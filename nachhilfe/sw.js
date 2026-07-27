@@ -1,6 +1,6 @@
 /* Service Worker: App-Hülle offline verfügbar halten. */
 
-const VERSION = 'nh-v1';
+const VERSION = 'nh-v2';
 const SHELL = [
   './',
   'index.html',
@@ -8,7 +8,7 @@ const SHELL = [
   'css/app.css',
   'js/app.js',
   'js/store.js',
-  'js/sync.js',
+  'js/filesync.js',
   'js/crypto.js',
   'js/ui.js',
   'js/util.js',
