@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="48%" r="75%">
+      <stop offset="0%" stop-color="#101a3c"/>
+      <stop offset="60%" stop-color="#080b1c"/>
+      <stop offset="100%" stop-color="#04050c"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#35e8ff" stop-opacity=".8"/>
+      <stop offset="60%" stop-color="#35e8ff" stop-opacity=".14"/>
+      <stop offset="100%" stop-color="#35e8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hex" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7af0ff"/>
+      <stop offset="100%" stop-color="#a35cff"/>
+    </linearGradient>
+  </defs>
+  <!-- Vollflächig: sichere Zone ist der mittlere Kreis mit r=205 -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="150" fill="url(#halo)"/>
+  <circle cx="256" cy="256" r="112" fill="none" stroke="#35e8ff" stroke-opacity=".3"
+          stroke-width="4" stroke-dasharray="9 18" stroke-linecap="round"/>
+  <path d="M 330 196 A 110 110 0 0 1 330 316" fill="none" stroke="#35e8ff"
+        stroke-width="14" stroke-linecap="round" stroke-opacity=".9"/>
+  <path d="M256 196 l52 30 v60 l-52 30 -52-30 v-60 z"
+        fill="url(#hex)" fill-opacity=".4" stroke="#7af0ff" stroke-width="10" stroke-linejoin="round"/>
+  <circle cx="256" cy="256" r="23" fill="#bff6ff"/>
+</svg>

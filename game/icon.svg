@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="46%" r="72%">
+      <stop offset="0%" stop-color="#0f1838"/>
+      <stop offset="55%" stop-color="#080b1c"/>
+      <stop offset="100%" stop-color="#04050c"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#35e8ff" stop-opacity=".85"/>
+      <stop offset="55%" stop-color="#35e8ff" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="#35e8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hex" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7af0ff"/>
+      <stop offset="100%" stop-color="#a35cff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="190" fill="url(#halo)"/>
+
+  <!-- Reichweiten-Ring -->
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#35e8ff" stroke-opacity=".28"
+          stroke-width="3" stroke-dasharray="10 20" stroke-linecap="round"/>
+
+  <!-- Impuls-Keil -->
+  <path d="M256 256 L 388 190 A 148 148 0 0 1 388 322 Z" fill="#35e8ff" fill-opacity=".16"/>
+  <path d="M 380 178 A 148 148 0 0 1 380 334" fill="none" stroke="#35e8ff"
+        stroke-width="15" stroke-linecap="round" stroke-opacity=".9"/>
+
+  <!-- Splitter -->
+  <g fill="none" stroke-linejoin="round">
+    <path d="M150 128 l30 18 -30 18 z" fill="#ff3d9a" stroke="#ff3d9a" stroke-width="9"/>
+    <path d="M118 300 l26 15 -26 15 z" fill="#a35cff" stroke="#a35cff" stroke-width="9"/>
+    <path d="M300 380 l26 15 -26 15 z" fill="#ffc447" stroke="#ffc447" stroke-width="9"/>
+  </g>
+
+  <!-- Kern -->
+  <path d="M256 176 l69 40 v80 l-69 40 -69-40 v-80 z"
+        fill="url(#hex)" fill-opacity=".38" stroke="#7af0ff" stroke-width="11" stroke-linejoin="round"/>
+  <circle cx="256" cy="256" r="30" fill="#bff6ff"/>
+</svg>
